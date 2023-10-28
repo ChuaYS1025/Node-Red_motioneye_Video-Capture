@@ -12,6 +12,7 @@ Under Motioneye:
 ![image](https://github.com/ChuaYS1025/Node-Red_motioneye_Video-Capture/assets/106689692/d1f1dba5-d152-4031-a9e9-bb378c7cc433)
 
 Under Node-Red:
+
 **In node-red exec node**
 command:
 "ffmpeg -i http://127.0.0.1:8081/ -t 30 -y -vcodec copy -an" 
@@ -25,6 +26,7 @@ http://127.0.0.1:8081/ >> streaming url
 ![image](https://github.com/ChuaYS1025/Node-Red_motioneye_Video-Capture/assets/106689692/3bc66b75-b15b-4e39-b96c-dd242ff0f7f1)
 
 Suggestions for improvement:
+
 Can integrate with other node or functions to make it to your own applications. 
 Example:
 Integrate with PLC (Omron, Mitsubishi), sensor to capture specific time video and durations.
