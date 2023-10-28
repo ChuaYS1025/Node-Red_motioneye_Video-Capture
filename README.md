@@ -19,8 +19,11 @@ command:
 
 Explanation:
 http://127.0.0.1:8081/ >> streaming url
+
 -t >> time in seconds (10 secs video saving 50 seconds of the footage)
+
 -an >>save location of the file 
+
 -vcodec >> decode the video
 
 ![image](https://github.com/ChuaYS1025/Node-Red_motioneye_Video-Capture/assets/106689692/3bc66b75-b15b-4e39-b96c-dd242ff0f7f1)
@@ -28,7 +31,9 @@ http://127.0.0.1:8081/ >> streaming url
 Suggestions for improvement:
 
 Can integrate with other node or functions to make it to your own applications. 
+
 Example:
+
 Integrate with PLC (Omron, Mitsubishi), sensor to capture specific time video and durations.
 Node-red has lots of module able to install and integrate it with this video capture.
 
