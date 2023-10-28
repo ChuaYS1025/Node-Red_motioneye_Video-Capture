@@ -1,0 +1,247 @@
+[
+    {
+        "id": "3685ed7f8c8e08d3",
+        "type": "inject",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 1420,
+        "wires": [
+            [
+                "c96467ca08183110"
+            ]
+        ]
+    },
+    {
+        "id": "ed9369632dbc4d7f",
+        "type": "inject",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 1500,
+        "wires": [
+            [
+                "4729a2cd10b4bf15",
+                "4f1193f4215ede6b"
+            ]
+        ]
+    },
+    {
+        "id": "4729a2cd10b4bf15",
+        "type": "function",
+        "z": "9efa042c.1ed728",
+        "name": "Video capture",
+        "func": "var now = new Date();\n// Create formatted time\nvar yyyy = now.getFullYear();\nvar mm = now.getMonth() < 9 ? \"0\" + (now.getMonth() + 1) : (now.getMonth() + 1); // getMonth() is zero-based\nvar dd  = now.getDate() < 10 ? \"0\" + now.getDate() : now.getDate();\nvar hh = now.getHours() < 10 ? \"0\" + now.getHours() : now.getHours();\nvar mmm  = now.getMinutes() < 10 ? \"0\" + now.getMinutes() : now.getMinutes();\n\nvar ss  = now.getSeconds() < 10 ? \"0\" + now.getSeconds() : now.getSeconds();\n\n// Last update: \"+dd + \".\" + mm + \".\" + yyyy + \" \" + hh + \":\" + mmm + \":\" + ss});\n\n// file path with / at the end\nvar path = \"/home/pi/node-red-static/\";                     // This is the path\nvar filename = \"video_\"+yyyy+mm+dd+\"-\"+hh+mmm+ss+\".mp4\";     // file name\nmsg.payload = path + filename;                              // pass the full path to payload for the exec node to add to the end of the command\nmsg.file = filename;                                        // To be used later to store the information in the DB\nmsg.path = path;                                            // Same as above\nmsg.wwwpath = \"/\";                                          // Same as above\nmsg.topic = \"store\";                                        // Flag to store this image in the DB\nmsg.type = \"videotest\";                                     // Image type e.g. Front camera, etc.\nmsg.epoch = now.getTime();                                  // Current timestamp\nmsg.formatteddate = dd + \".\" + mm + \".\" + yyyy + \" \" + hh + \":\" + mmm + \":\" + ss;   // Formatted timestamp to be used later\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 311.99998474121094,
+        "y": 1479.9999771118164,
+        "wires": [
+            [
+                "99046c745f9dc7a6",
+                "fb396e104a867232"
+            ]
+        ]
+    },
+    {
+        "id": "c96467ca08183110",
+        "type": "change",
+        "z": "9efa042c.1ed728",
+        "name": "Set filename",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "/home/pi/node-red-static/video.mp4",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 1380,
+        "wires": [
+            [
+                "fb396e104a867232"
+            ]
+        ]
+    },
+    {
+        "id": "fb396e104a867232",
+        "type": "exec",
+        "z": "9efa042c.1ed728",
+        "command": "ffmpeg -i http://127.0.0.1:8081/ -t 30 -y -vcodec copy -an ",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Capture video",
+        "x": 551.9999847412109,
+        "y": 1379.9999771118164,
+        "wires": [
+            [
+                "e2236765035482af"
+            ],
+            [
+                "f22f6ebce9421a43"
+            ],
+            [
+                "6fd03433efef07a8",
+                "01ee253ddf09ae99"
+            ]
+        ]
+    },
+    {
+        "id": "e2236765035482af",
+        "type": "debug",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 770,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "6fd03433efef07a8",
+        "type": "debug",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 770,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "f22f6ebce9421a43",
+        "type": "file",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "filename": "/home/pi/avconv.out",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "x": 860,
+        "y": 1420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e3317bb243339c82",
+        "type": "comment",
+        "z": "9efa042c.1ed728",
+        "name": "Video Capture 2 - Motion Eye",
+        "info": "",
+        "x": 200,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "01ee253ddf09ae99",
+        "type": "function",
+        "z": "9efa042c.1ed728",
+        "name": "Statistics",
+        "func": "var now = new Date();\nvar stat = context.get(\"stat\");\nif (stat===undefined) {\n    // Initialize the object in case NR restart\n    stat = { \"count\": 0, \"success\": 0, \"rate\": 0.0, \"last\": now};\n}\nif (msg.topic===\"reset\") {\n    // Reset message was received: reset statistics\n    stat = { \"count\": 0, \"success\": 0, \"rate\": 0.0, \"last\": now};\n} else {\n    // Update statistics\n    stat.count++;\n    if (msg.payload.code===0) {\n        stat.success++;\n    }    \n    stat.rate=stat.success/stat.count;\n    stat.last=now;\n}\n\n// Create formatted time\nvar yyyy = now.getFullYear();\nvar mm = now.getMonth() < 9 ? \"0\" + (now.getMonth() + 1) : (now.getMonth() + 1); // getMonth() is zero-based\nvar dd  = now.getDate() < 10 ? \"0\" + now.getDate() : now.getDate();\nvar hh = now.getHours() < 10 ? \"0\" + now.getHours() : now.getHours();\nvar mmm  = now.getMinutes() < 10 ? \"0\" + now.getMinutes() : now.getMinutes();\nvar ss  = now.getSeconds() < 10 ? \"0\" + now.getSeconds() : now.getSeconds();\n\nmsg.formattedtime = dd + \".\" + mm + \".\" + yyyy + \" \" + hh + \":\" + mmm + \":\" + ss;\nmsg.success = stat.success;\nmsg.rate = Math.floor(stat.rate*100);\n\nnode.status({fill:\"blue\",shape:\"ring\",text:\"Videos: \"+msg.success+\" | \"+msg.rate+\"% | Last update: \"+dd + \".\" + mm + \".\" + yyyy + \" \" + hh + \":\" + mmm + \":\" + ss});\n\n\n// Saving data in the context\ncontext.set(\"stat\",stat);\n\nreturn msg;\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 1540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f1193f4215ede6b",
+        "type": "debug",
+        "z": "9efa042c.1ed728",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 160,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "e0b0e0095383de7a",
+        "type": "catch",
+        "z": "9efa042c.1ed728",
+        "name": "",
+        "scope": [
+            "fb396e104a867232"
+        ],
+        "uncaught": false,
+        "x": 490,
+        "y": 1460,
+        "wires": [
+            [
+                "87e34130d95cc8b5"
+            ]
+        ]
+    },
+    {
+        "id": "87e34130d95cc8b5",
+        "type": "debug",
+        "z": "9efa042c.1ed728",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "99046c745f9dc7a6",
+        "type": "debug",
+        "z": "9efa042c.1ed728",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 1560,
+        "wires": []
+    }
+]
